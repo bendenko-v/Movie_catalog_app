@@ -1,4 +1,4 @@
-from project.models import User
+from project.models import User, Favorite, Movie
 from sqlalchemy.orm import scoped_session
 
 
@@ -7,14 +7,8 @@ class UserDAO:
     def __init__(self, db_session: scoped_session) -> None:
         self._db_session = db_session
 
-    def get_one(self, uid):
-        return self._db_session.query(User).get(uid)
-
     def get_by_email(self, email):
         return self._db_session.query(User).filter(User.email == email).first()
-
-    def get_all(self):
-        return self._db_session.query(User).all()
 
     def create(self, new_user):
         entity = User(**new_user)
@@ -22,15 +16,31 @@ class UserDAO:
         self._db_session.commit()
         return entity
 
-    def update(self, data):
-        user = self.get_one(data.get("id"))
-        user.email = data.get("login")
-        user.password = data.get("password")
-
+    def update(self, user):
         self._db_session.add(user)
         self._db_session.commit()
 
-    def delete(self, uid):
-        user = self.get_one(uid)
-        self._db_session.delete(user)
+    def get_favorites(self, uid):
+        return self._db_session.query(Movie).join(Favorite).filter(Favorite.user_id == uid).all()
+
+    def add_favorite(self, uid, mid):
+        entity = Favorite(**{'user_id': uid, 'movie_id': mid})
+        self._db_session.add(entity)
         self._db_session.commit()
+
+    def delete_favorite(self, uid, mid):
+        entity = self._db_session.query(Favorite).filter(Favorite.user_id == uid,
+                                                         Favorite.movie_id == mid).first()
+        self._db_session.delete(entity)
+        self._db_session.commit()
+
+    # def get_one(self, uid):
+    #     return self._db_session.query(User).get(uid)
+    #
+    # def get_all(self):
+    #     return self._db_session.query(User).all()
+    #
+    # def delete(self, uid):
+    #     user = self.get_one(uid)
+    #     self._db_session.delete(user)
+    #     self._db_session.commit()

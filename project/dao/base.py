@@ -26,8 +26,11 @@ class BaseDAO(Generic[T]):
         stmt = self._db_session.query(self.__model__)
         if status == 'new':
             if page:
-                return stmt.order_by(desc(self.__model__.year)).paginate(page=page,
-                                                                         per_page=self._items_per_page).items
+                try:
+                    return stmt.order_by(desc(self.__model__.year)).paginate(page=page,
+                                                                             per_page=self._items_per_page).items
+                except NotFound:
+                    return []
             return stmt.order_by(desc(self.__model__.year)).all()
         if page:
             try:

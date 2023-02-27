@@ -1,14 +1,7 @@
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
-from marshmallow import Schema, fields
 
 from project.setup.db import models
-
-
-class Genre(models.Base):
-    __tablename__ = 'genres'
-
-    name = Column(String(100), unique=True, nullable=False)
 
 
 class Movie(models.Base):
@@ -31,6 +24,12 @@ class Director(models.Base):
     name = Column(String(100), unique=True, nullable=False)
 
 
+class Genre(models.Base):
+    __tablename__ = 'genres'
+
+    name = Column(String(100), unique=True, nullable=False)
+
+
 class User(models.Base):
     __tablename__ = 'users'
 
@@ -38,40 +37,13 @@ class User(models.Base):
     password = Column(String(200), nullable=False)
     name = Column(String(100))
     surname = Column(String(200))
-    favorite_genre = Column(String(200))
+    favourite_genre = Column(String(200))
 
 
-class MovieSchema(Schema):
-    id = fields.Int()
-    title = fields.Str()
-    description = fields.Str()
-    trailer = fields.Str()
-    year = fields.Int()
-    rating = fields.Float()
-    genre_id = fields.Int()
-    director_id = fields.Int()
+class Favorite(models.Base):
+    __tablename__ = 'favorites'
 
-
-class DirectorSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-
-
-class GenreSchema(Schema):
-    id = fields.Int()
-    name = fields.Str()
-
-
-class UserSchema(Schema):
-    id = fields.Int()
-    email = fields.Str()
-    password = fields.Str()
-    name = fields.Str()
-    surname = fields.Str()
-    favorite_genre = fields.Str()
-
-
-movie_schema = MovieSchema()
-director_schema = DirectorSchema()
-genre_schema = GenreSchema()
-user_schema = UserSchema()
+    user_id = Column(Integer(), ForeignKey("users.id"))
+    user = relationship("User")
+    movie_id = Column(Integer(), ForeignKey("movies.id"))
+    movie = relationship("Movie")

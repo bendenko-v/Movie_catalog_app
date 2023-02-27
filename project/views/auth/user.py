@@ -1,51 +1,51 @@
 from flask import request
 from flask_restx import Resource, Namespace
 
-# from project.helpers.decorators import admin_required
-from project.models import user_schema
+from project.helpers.helpers import get_user_email_from_token
+from project.helpers.decorators import auth_required
+from project.setup.api.models import user_model
 from project.container import user_service
 
 api = Namespace('user')
 
 
 @api.route('/')
-class UsersView(Resource):
-    """
-    Временно работает по старой схеме. В POST также проверяется есть ли уже пользователь с данным email
-    """
-
-    def get(self):
-        all_users = user_service.get_all()
-        result = user_schema.dump(all_users, many=True)
-        return result, 200
-
-    def post(self):
-        req_json = request.json
-        user = user_service.create(req_json)
-        return "", 201, {"location": f"/user/{user.id}"}
-
-
-@api.route('/<int:uid>')
 class UserView(Resource):
-    """
-    Временно работает по старой схеме плюс в PUT проверка email и старого пароля при замене на новый
-    """
 
-    def get(self, uid):
-        user = user_service.get_one(uid)
-        result = user_schema.dump(user)
-        return result, 200
+    @auth_required
+    @api.marshal_with(user_model, as_list=True, code=200, description='OK')
+    def get(self):
+        """
+        Get user's information (profile)
+        """
+        user_email = get_user_email_from_token()
+        return user_service.get_by_email(user_email)
 
-    def put(self, uid):
+    @auth_required
+    def patch(self):
+        """
+        Change user data (name, surname, favorite genre).
+        """
         req_json = request.json
-        if "id" not in req_json:
-            req_json["id"] = uid
-        result = user_service.update(req_json)
-        if not result:
-            return "Login and/or email doesn't match!", 404
-        return "", 204
+        req_json['email'] = get_user_email_from_token()
+        user_service.patch(req_json)
+        return '', 204
 
     # @admin_required
-    def delete(self, uid):
-        user_service.delete(uid)
-        return "", 204
+    # def delete(self, uid):
+    #     user_service.delete(uid)
+    #     return '', 204
+
+
+@api.route('/password/')
+class PasswordView(Resource):
+
+    @auth_required
+    def put(self):
+        """
+        Update user password
+        """
+        req_json = request.json
+        req_json['email'] = get_user_email_from_token()
+        user_service.update(req_json)
+        return '', 204

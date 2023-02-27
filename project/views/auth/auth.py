@@ -6,12 +6,12 @@ from project.container import auth_service, user_service
 api = Namespace('auth')
 
 
-@api.route('/login')
+@api.route('/login/')
 class AuthsView(Resource):
     def post(self):
         data = request.json
 
-        email = data.get('login', None)
+        email = data.get('email', None)
         password = data.get('password', None)
 
         if None in [email, password]:
@@ -34,12 +34,12 @@ class AuthsView(Resource):
         return tokens, 201
 
 
-@api.route('/register')
+@api.route('/register/')
 class RegisterView(Resource):
     def post(self):
         data = request.json
 
-        email = data.get('login', None)
+        email = data.get('email', None)
         password = data.get('password', None)
 
         if None in [email, password]:
