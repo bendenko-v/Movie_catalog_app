@@ -23,3 +23,13 @@ logs/
 
 # JetBrains
 .idea/
+
+# other
+project_copy.db
+favorites.json
+fixtures.json
+movies.json
+load_fixture_favorites.py
+load_fixture_movies.py
+load_fixtures.py
+create_tables.py

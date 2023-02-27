@@ -6,20 +6,7 @@ Movie catalog application on Flask-RESTX with user registration.
 - Install dependencies
 ```shell
 pip install -r requirements.txt
-
-pip install -r requirements.dev.txt
 ```
-
-- Create models (will clear the database and create all the models specified in the import)
-```shell
-python create_tables.py
-```
-
-- Loading data into the database
-```shell
-python load_fixtures.py
-```
-The script reads the fixtures.json file and loads the data into the database. If the data has already been loaded, it displays an appropriate message.
 
 ## App run
 
@@ -50,6 +37,4 @@ pytest .
 ```
 
 ## Known issues
-* Some problems with registration/authorization through the front
-* Front not working properly - problems occur when trying to access pages with a specific movie (/movies/id, director (/directors/id, genre (/genres/id)
-* The Users API namespace does not yet work as specified in the assignment (old variant)
+* Аdding/removing movies to favorites does not work on the front (redirect to /login)
