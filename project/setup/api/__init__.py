@@ -4,7 +4,7 @@ api = Api(
     authorizations={
         "Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}
     },
-    title="Flask Course Project 4",
-    description='Movies catalog REST API',
+    title="Movie catalog App",
+    description='Movies catalog REST API backend',
     doc="/docs",
 )

@@ -33,14 +33,3 @@ class UserDAO:
                                                          Favorite.movie_id == mid).first()
         self._db_session.delete(entity)
         self._db_session.commit()
-
-    # def get_one(self, uid):
-    #     return self._db_session.query(User).get(uid)
-    #
-    # def get_all(self):
-    #     return self._db_session.query(User).all()
-    #
-    # def delete(self, uid):
-    #     user = self.get_one(uid)
-    #     self._db_session.delete(user)
-    #     self._db_session.commit()

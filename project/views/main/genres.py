@@ -18,7 +18,7 @@ class GenresView(Resource):
         return genre_service.get_all(**page_parser.parse_args())
 
 
-@api.route('/<int:genre_id>/', doc={'params': {'genre_id': 'Genre ID'}})
+@api.route('/<int:genre_id>')
 class GenreView(Resource):
     @api.response(404, 'Not Found')
     @api.marshal_with(genre_model, code=200, description='OK')

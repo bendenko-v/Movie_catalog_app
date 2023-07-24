@@ -59,12 +59,3 @@ class UserService:
 
     def compare_passwords(self, password_hash, password):
         return compose_passwords(password_hash, password)
-
-    # def get_one(self, uid):
-    #     return self.dao.get_one(uid)
-
-    # def get_all(self):
-    #     return self.dao.get_all()
-
-    # def delete(self, uid):
-    #     self.dao.delete(uid)

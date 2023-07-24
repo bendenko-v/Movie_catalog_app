@@ -22,7 +22,7 @@ class FavoritesView(Resource):
         return movies
 
 
-@api.route('/movies/<int:mid>', doc={'params': {'mid': 'Movie ID'}})
+@api.route('/movies/<int:mid>')
 class FavoriteView(Resource):
 
     @auth_required

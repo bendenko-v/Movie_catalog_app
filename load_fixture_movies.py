@@ -9,7 +9,6 @@ if __name__ == '__main__':
 
     data: list[dict[str, any]] = read_json("movies.json")
     with create_app(config).app_context():
-        # db.create_all()
 
         for item in data:
             item['id'] = item.pop('pk')

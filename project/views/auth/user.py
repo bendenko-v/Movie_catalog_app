@@ -31,11 +31,6 @@ class UserView(Resource):
         user_service.patch(req_json)
         return '', 204
 
-    # @admin_required
-    # def delete(self, uid):
-    #     user_service.delete(uid)
-    #     return '', 204
-
 
 @api.route('/password/')
 class PasswordView(Resource):

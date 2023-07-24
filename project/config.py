@@ -7,18 +7,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class BaseConfig:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'you-will-never-guess')
-    # JSON_AS_ASCII = False
+    print(os.getenv('TOKEN_EXPIRE_MINUTES'))
+    print(os.getenv('SECRET_KEY'))
+    print(os.getenv('TOKEN_EXPIRE_DAYS'))
+    print(os.getenv('HASH_ITERATIONS'))
+    print(os.getenv('SALT'))
+
+    SECRET_KEY = os.getenv('SECRET_KEY')
 
     ITEMS_PER_PAGE = 12
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    TOKEN_EXPIRE_MINUTES = 15
-    TOKEN_EXPIRE_DAYS = 130
+    TOKEN_EXPIRE_MINUTES = int(os.getenv('TOKEN_EXPIRE_MINUTES'))
+    TOKEN_EXPIRE_DAYS = int(os.getenv('TOKEN_EXPIRE_DAYS'))
 
-    PWD_HASH_SALT = base64.b64decode("salt")
-    PWD_HASH_ITERATIONS = 100_000
+    PWD_HASH_SALT = base64.b64decode(os.getenv('SALT'))
+    PWD_HASH_ITERATIONS = int(os.getenv('HASH_ITERATIONS'))
 
     RESTX_JSON = {
         'ensure_ascii': False,
@@ -38,7 +43,8 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
-    # TODO: дополнить конфиг
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + BASE_DIR.joinpath('project.db').as_posix()
 
 
 class ConfigFactory:

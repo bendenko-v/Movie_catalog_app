@@ -16,18 +16,13 @@ def create_app(config_obj):
     app.config.from_object(config_obj)
     app.json.ensure_ascii = False
 
-    CORS(app,
-         resources={r"/*": {"origins": ['http://127.0.0.1:5000', 'http://localhost:8080']}},
-         supports_credentials=True
-         )
+    CORS(app, resources={r'/*': {'origins': '*'}, r"/movies/*/": {"origins": "*"}}, supports_credentials=True)
 
     db.init_app(app)
     api.init_app(app)
 
-    # Регистрация эндпоинтов
     api.add_namespace(user_ns)
     api.add_namespace(auth_ns)
-
     api.add_namespace(movies_ns)
     api.add_namespace(directors_ns)
     api.add_namespace(genres_ns)
